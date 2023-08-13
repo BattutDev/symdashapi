@@ -29,33 +29,21 @@ class UserController extends AbstractController
         $this->passwordHasher = $passwordHasher;
     }
 
-    /**
-     * @Route("/", methods="GET")
-     */
     #[Route('/users/', methods: ['GET'])]
-
     public function getAll(): JsonResponse
     {
         $users = $this->userRepository->findAll();
         return $this->json($users);
     }
 
-    /**
-     * @Route("/{id}", methods="GET")
-     */
-    #[Route('/users/{id}', methods: ['GET'])]
-
+    #[Route('/users/{id<\d+>?}', methods: ['GET'])]
     public function getOne(int $id): JsonResponse
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
         return $this->json($user);
     }
 
-    /**
-     * @Route("/", methods="POST")
-     */
     #[Route('/users/', methods: ['POST'])]
-
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -73,10 +61,7 @@ class UserController extends AbstractController
         return $this->json($user, Response::HTTP_CREATED);
     }
 
-    /**
-     * @Route("/{id}", methods="DELETE")
-     */
-    #[Route('/users/{id}', methods: ['DELETE'])]
+    #[Route('/users/{id<\d+>?}', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {
         $user = $this->userRepository->findOneBy(['id'=> $id]);
