@@ -11,6 +11,7 @@ composer.lock
 symfony.lock
 .idea/
 .env
+.env.test
 migrations/*.php
 ###< symfony/framework-bundle ###
 
