@@ -48,9 +48,15 @@ class UserController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        if (
+            !isset($data['email'])
+            || !isset($data['firstname'])
+            || !isset($data['lastname'])
+            || !isset($data['password']))
+            return $this->json(['message' => 'Missing fields'], Response::HTTP_BAD_REQUEST);
+
         $user = new User();
-        $user
-            ->setEmail($data['email'])
+        $user->setEmail($data['email'])
             ->setFirstName($data['firstname'])
             ->setLastName($data['lastname'])
             ->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
