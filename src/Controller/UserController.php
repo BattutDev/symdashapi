@@ -20,13 +20,11 @@ class UserController extends AbstractController
     private UserRepository $userRepository;
     private EntityManagerInterface $entityManager;
 
-    private UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
-        $this->passwordHasher = $passwordHasher;
     }
 
     #[Route('/users/', methods: ['GET'])]
@@ -59,13 +57,42 @@ class UserController extends AbstractController
         $user->setEmail($data['email'])
             ->setFirstName($data['firstname'])
             ->setLastName($data['lastname'])
-            ->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
-
+            ->setPlainPassword($data['password']);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         return $this->json($user, Response::HTTP_CREATED);
     }
+
+    #[Route('/users/{id<\d+>?}', methods: ['PUT'])]
+    public function update(int $id, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $user = $this->userRepository->findOneBy(['id'=> $id]);
+
+        if (!$user) return $this->json(null, Response::HTTP_NOT_MODIFIED);
+
+        if (isset($data['email'])) {
+            $user->setEmail($data['email']);
+        }
+
+        if (isset($data['firstname'])) {
+            $user->setFirstName($data['firstname']);
+        }
+
+        if (isset($data['lastname'])) {
+            $user->setLastName($data['lastname']);
+        }
+
+        if (isset($data['password'])) {
+            $user->setPlainPassword($data['password']);
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+        return $this->json($user);
+    }
+
 
     #[Route('/users/{id<\d+>?}', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
