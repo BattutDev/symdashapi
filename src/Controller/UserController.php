@@ -27,21 +27,21 @@ class UserController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/users/', methods: ['GET'])]
+    #[Route('/api/users/', methods: ['GET'])]
     public function getAll(): JsonResponse
     {
         $users = $this->userRepository->findAll();
         return $this->json($users);
     }
 
-    #[Route('/users/{id<\d+>?}', methods: ['GET'])]
+    #[Route('/api/users/{id<\d+>?}', methods: ['GET'])]
     public function getOne(int $id): JsonResponse
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
         return $this->json($user);
     }
 
-    #[Route('/users/', methods: ['POST'])]
+    #[Route('/api/users/', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -64,7 +64,7 @@ class UserController extends AbstractController
         return $this->json($user, Response::HTTP_CREATED);
     }
 
-    #[Route('/users/{id<\d+>?}', methods: ['PUT'])]
+    #[Route('/api/users/{id<\d+>?}', methods: ['PUT'])]
     public function update(int $id, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -94,7 +94,7 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/users/{id<\d+>?}', methods: ['DELETE'])]
+    #[Route('/api/users/{id<\d+>?}', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {
         $user = $this->userRepository->findOneBy(['id'=> $id]);

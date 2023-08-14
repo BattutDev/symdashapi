@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MainController extends AbstractController
 {
-    #[Route('/', name: 'app_main', methods: ['GET'])]
+    #[Route('/api/', name: 'app_main', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return $this->json([
