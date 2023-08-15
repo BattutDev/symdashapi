@@ -32,14 +32,17 @@ class UserController extends AbstractController
     public function getAll(): JsonResponse
     {
         $users = $this->userRepository->findAll();
-        return $this->json($users);
+        $responseData = array_map(function ($user) {
+            return $user->toResponse();
+        }, $users);
+        return $this->json($responseData);
     }
 
     #[Route('/api/users/{id<\d+>?}', methods: ['GET'])]
     public function getOne(int $id): JsonResponse
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
-        return $this->json($user);
+        return $this->json($user?->toResponse());
     }
 
     #[Route('/api/users/', methods: ['POST'])]
