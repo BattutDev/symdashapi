@@ -26,3 +26,8 @@ services:
     App\EntityListener\:
         resource: "../src/EntityListener/"
         tags: ["doctrine.orm.entity_listener"]
+
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
