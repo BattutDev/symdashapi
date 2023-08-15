@@ -2,17 +2,20 @@
 
 namespace App\EventListener;
 
+use Doctrine\ORM\Mapping\MappingException;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExceptionListener
 {
     public function onKernelException(ExceptionEvent $event): void
     {
+
         $exception = $event->getThrowable();
 
         /*
@@ -46,10 +49,11 @@ class ExceptionListener
             $event->setResponse($response);
         }
         */
-        $event->setResponse(new JsonResponse([
-            'code' => $exception->getStatusCode(),
-            'message' => $exception->getMessage()
-        ]));
+            $event->setResponse(new JsonResponse([
+                'code' => $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : 500,
+                'message' => $exception->getMessage()
+            ]));
+
 
 
     }
