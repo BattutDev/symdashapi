@@ -180,4 +180,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = $createdAt;
     }
 
+    public function toResponse(): array
+    {
+        return [
+            "email" => $this->getEmail(),
+            "firstName" => $this->getFirstName(),
+            "lastName" => $this->getLastName(),
+            "roles" => $this->getRoles(),
+            "createdAt" => $this->getCreatedAt()
+        ];
+    }
+
+
+
 }
