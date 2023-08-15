@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /**
  * @Route("/users")
@@ -61,7 +62,7 @@ class UserController extends AbstractController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return $this->json($user, Response::HTTP_CREATED);
+        return $this->json($user->toResponse(), Response::HTTP_CREATED);
     }
 
     #[Route('/api/users/{id<\d+>?}', methods: ['PUT'])]
@@ -90,7 +91,7 @@ class UserController extends AbstractController
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        return $this->json($user);
+        return $this->json($user->toResponse());
     }
 
 
@@ -103,6 +104,12 @@ class UserController extends AbstractController
         $this->entityManager->flush();
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/api/users/@me', methods: ['GET'])]
+    public function getMe(#[CurrentUser] User $user): JsonResponse
+    {
+        return $this->json($user->toResponse());
     }
 
 }
