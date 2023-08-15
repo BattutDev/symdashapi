@@ -15,8 +15,7 @@ class MainController extends AbstractController
     public function index(): JsonResponse
     {
         return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/MainController.php',
+            'message' => 'Bienvenue sur l\'api'
         ]);
     }
 }
