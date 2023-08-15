@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /**
- * @Route("/users")
+ * @Route("/api/users")
  */
 class UserController extends AbstractController
 {
